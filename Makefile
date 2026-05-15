@@ -2,8 +2,8 @@ PLUGIN_SLUG := sleepscreenwidgets
 ZIP_ROOT := $(PLUGIN_SLUG).koplugin
 DISTDIR := dist
 
-PYTHON ?= python
-VERSION := $(shell $(PYTHON) tools/read_version.py)
+LUA ?= lua
+VERSION := $(shell $(LUA) tools/read_version.lua)
 
 ZIP := $(DISTDIR)/$(PLUGIN_SLUG)-$(VERSION).zip
 
@@ -20,7 +20,7 @@ prod: pack
 
 pack: $(ZIP)
 
-$(ZIP): _meta.lua tools/read_version.py $(DISTDIR)
+$(ZIP): _meta.lua tools/read_version.lua $(DISTDIR)
 	git archive --format=zip --prefix="$(ZIP_ROOT)/" -o "$@" HEAD -- . $(ARCHIVE_EXCLUDES)
 
 ifeq ($(OS),Windows_NT)
