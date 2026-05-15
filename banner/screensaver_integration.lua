@@ -5,8 +5,11 @@ local Screen = Device.screen
 
 local Config = require("config")
 local GridComposer = require("grid.grid_composer")
+local Registry = require("banner.widgets.registry")
 local Settings = require("settings")
+local SleepBannerRefresh = require("banner.sleep_banner_refresh")
 local util = require("util")
+local UIManager = require("ui/uimanager")
 
 local og_ui_man_show
 
@@ -72,37 +75,53 @@ local function patched_show(self, widget, ...)
         return og_ui_man_show(self, widget, ...)
     end
 
-    local screen_w, screen_h = Screen:getWidth(), Screen:getHeight()
-
-    local B_SETT = Settings:effectiveBanner()
-    local HL_SETT = merge_default_highlight()
-
-    local last_file = G_reader_settings:readSetting("lastfile")
-    local Sidecar = BookList.getDocSettings(last_file)
-    local ui_inst = require("apps/reader/readerui").instance or require("apps/filemanager/filemanager").instance
+    SleepBannerRefresh.stop()
 
     local orig_sleep_widget = cus_pos_container.widget
     local orig_sleep_text = orig_sleep_widget.text
-    orig_sleep_widget:free()
 
     local placements = Settings:getGridPlacements()
-    local ctx = {
-        B_SETT = B_SETT,
-        HL_SETT = HL_SETT,
-        ui_inst = ui_inst,
-        last_file = last_file,
-        Sidecar = Sidecar,
-        orig_sleep_text = orig_sleep_text or "",
-        screen_w = screen_w,
-        screen_h = screen_h,
-        grid_inner_h = screen_h,
-    }
 
+    local function make_ctx()
+        local screen_w, screen_h = Screen:getWidth(), Screen:getHeight()
+        return {
+            B_SETT = Settings:effectiveBanner(),
+            HL_SETT = merge_default_highlight(),
+            ui_inst = require("apps/reader/readerui").instance or require("apps/filemanager/filemanager").instance,
+            last_file = G_reader_settings:readSetting("lastfile"),
+            Sidecar = BookList.getDocSettings(G_reader_settings:readSetting("lastfile")),
+            orig_sleep_text = orig_sleep_text or "",
+            screen_w = screen_w,
+            screen_h = screen_h,
+            grid_inner_h = screen_h,
+        }
+    end
+
+    orig_sleep_widget:free()
+
+    local ctx = make_ctx()
     local content_widget = GridComposer.compose(placements, ctx)
 
     cus_pos_container.horizontal_position = 0.5
     cus_pos_container.vertical_position = 0
     cus_pos_container.widget = content_widget
+
+    Registry.ensure_registered()
+    local interval = Settings:effectiveSleepRefreshIntervalSec()
+    if interval > 0 and Registry.placements_want_refresh(placements) then
+        SleepBannerRefresh.start{
+            interval_sec = interval,
+            screensaver_widget = widget,
+            on_tick = function()
+                local oldw = cus_pos_container.widget
+                if oldw and oldw.free then
+                    oldw:free()
+                end
+                cus_pos_container.widget = GridComposer.compose(Settings:getGridPlacements(), make_ctx())
+                UIManager:setDirty(widget, "ui")
+            end,
+        }
+    end
 
     return og_ui_man_show(self, widget, ...)
 end
@@ -111,12 +130,12 @@ local M = {}
 
 function M.install()
     local UM = require("ui/uimanager")
-    if UM._sleepscreen_widgets_banner_show_hook then
+    if UM._sleepscreenwidgets_banner_show_hook then
         return
     end
     og_ui_man_show = UM.show
     UM.show = patched_show
-    UM._sleepscreen_widgets_banner_show_hook = true
+    UM._sleepscreenwidgets_banner_show_hook = true
 end
 
 return M

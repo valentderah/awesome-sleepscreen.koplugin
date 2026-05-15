@@ -26,5 +26,5 @@ If any of this is missing, KOReader will show the normal sleep message instead o
 ## Installation
 
 1. Copy the plugin folder into KOReader’s `plugins` directory, for example:  
-   `koreader/plugins/sleepscreen-widgets.koplugin/`
+   `koreader/plugins/sleepscreenwidgets.koplugin/`
 2. Restart KOReader and enable the plugin in the menu.

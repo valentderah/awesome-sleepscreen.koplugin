@@ -26,5 +26,5 @@
 ## Установка
 
 1. Скопируйте папку плагина в каталог `plugins` KOReader, например:  
-   `koreader/plugins/sleepscreen-widgets.koplugin/`
+   `koreader/plugins/sleepscreenwidgets.koplugin/`
 2. Перезапустите KOReader и включите плагин в меню.

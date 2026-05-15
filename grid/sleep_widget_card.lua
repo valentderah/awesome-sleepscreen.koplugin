@@ -5,7 +5,7 @@ local FrameStyle = require("banner.frame_style")
 local CardGeometry = require("grid.card_geometry")
 
 local SleepWidgetCard = WidgetContainer:extend{
-    name = "sleepscreen_widgets_sleep_widget_card",
+    name = "sleepscreenwidgets_sleep_widget_card",
     B_SETT = nil,
     radius = 0,
     pad_h = 0,

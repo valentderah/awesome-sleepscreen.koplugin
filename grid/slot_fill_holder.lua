@@ -3,7 +3,7 @@ local Geom = require("ui/geometry")
 local WidgetContainer = require("ui/widget/container/widgetcontainer")
 
 local SlotFillHolder = WidgetContainer:extend{
-    name = "sleepscreen_widgets_slot_fill_holder",
+    name = "sleepscreenwidgets_slot_fill_holder",
     inner_w = 1,
     inner_h = 1,
 }

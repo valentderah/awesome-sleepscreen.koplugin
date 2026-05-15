@@ -166,6 +166,20 @@ local function proto_with_span(widget_type, span_val)
     return p
 end
 
+--- Submenu when opening a single cell from the row menu: no extra "Edit…" wrapper.
+local function submenu_for_cell(row, col)
+    local placements = Settings:getGridPlacements()
+    local idx, is_anchor = cover_info(placements, row, col)
+    if not idx then
+        return GridEditor.addWidgetMenu(row, col)
+    end
+    local p = placements[idx]
+    if is_anchor then
+        return GridEditor.widgetMenu(row, col)
+    end
+    return GridEditor.widgetMenu(p.row, p.col)
+end
+
 function GridEditor.addWidgetMenu(row, col)
     local max_col_span = GridModel.maxSpanForCol(col)
     local function span_label(s)
@@ -242,14 +256,6 @@ function GridEditor.widgetMenu(row, col)
         local w = i and pl[i]
         if not w then return 1 end
         return GridModel.resolveColSpan(w.type, w.params, w.row, w.col, default_fn)
-    end
-
-    local function with_anchor(mutate)
-        local pl = Settings:getGridPlacements()
-        local i = anchor_index(pl, row, col)
-        local w = i and pl[i]
-        if not w then return end
-        mutate(w, pl, i)
     end
 
     table.insert(items, {
@@ -497,69 +503,13 @@ local function slot_label(row, col)
     return string.format(_("Row %d, column %d — (wider widget @ %d,%d)"), row, col, p.row, p.col)
 end
 
-function GridEditor.cellMenu(row, col)
-    local placements = Settings:getGridPlacements()
-    local idx, is_anchor = cover_info(placements, row, col)
-
-    if idx and not is_anchor then
-        local p = placements[idx]
-        local items = {
-            {
-                text = string.format(
-                    _("This cell is part of a widget anchored at row %d, column %d."),
-                    p.row,
-                    p.col
-                ),
-                sub_item_table_func = function()
-                    return GridEditor.widgetMenu(p.row, p.col)
-                end,
-            },
-        }
-        items.needs_refresh = true
-        items.refresh_func = function()
-            return GridEditor.cellMenu(row, col)
-        end
-        return items
-    end
-
-    if idx and is_anchor then
-        local items = {
-            {
-                text = string.format("%s · %s", slot_label(row, col), _("Edit…")),
-                sub_item_table_func = function()
-                    return GridEditor.widgetMenu(row, col)
-                end,
-            },
-        }
-        items.needs_refresh = true
-        items.refresh_func = function()
-            return GridEditor.cellMenu(row, col)
-        end
-        return items
-    end
-
-    local items = {
-        {
-            text = slot_label(row, col),
-            sub_item_table_func = function()
-                return GridEditor.addWidgetMenu(row, col)
-            end,
-        },
-    }
-    items.needs_refresh = true
-    items.refresh_func = function()
-        return GridEditor.cellMenu(row, col)
-    end
-    return items
-end
-
 function GridEditor.rowMenu(row)
     local items = {}
     for col = 1, GridModel.GRID_COLS do
         table.insert(items, {
             text = slot_label(row, col),
             sub_item_table_func = function()
-                return GridEditor.cellMenu(row, col)
+                return submenu_for_cell(row, col)
             end,
         })
     end

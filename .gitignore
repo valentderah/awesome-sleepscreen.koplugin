@@ -24,6 +24,11 @@ $RECYCLE.BIN/
 *.temp
 .cache/
 
-docs/
+# Local notes under docs/ stay untracked; superpowers specs/plans are tracked
+/docs/*
+!/docs/superpowers/
+/docs/superpowers/*
+!/docs/superpowers/specs/
+!/docs/superpowers/plans/
 
 dist/

@@ -30,7 +30,7 @@ local function strip_old_custom_entries(sub_item_table)
     if not sub_item_table then return end
     for i = #sub_item_table, 1, -1 do
         local item = sub_item_table[i]
-        if item._sleepscreen_widgets then
+        if item._sleepscreenwidgets then
             table.remove(sub_item_table, i)
         end
     end
@@ -40,15 +40,9 @@ local function append_custom_entries(sub_item_table)
     if not sub_item_table then return end
     strip_old_custom_entries(sub_item_table)
     local MenuSleep = require("menu.menu_sleep")
-    local entries = {
-        MenuSleep.buildEnableToggleEntry(),
-        MenuSleep.buildLayoutRootEntry(plugin_inst),
-        MenuSleep.buildHelpEntry(),
-    }
-    for _, entry in ipairs(entries) do
-        entry._sleepscreen_widgets = true
-        table.insert(sub_item_table, entry)
-    end
+    local entry = MenuSleep.buildSleepscreenwidgetsRootEntry(plugin_inst)
+    entry._sleepscreenwidgets = true
+    table.insert(sub_item_table, entry)
 end
 
 local function inject_via_menu_items(menu_items)
@@ -74,7 +68,7 @@ local function remove_fallback_from_tabs(tab_item_table)
         if type(tab) == "table" then
             for ii = #tab, 1, -1 do
                 local it = tab[ii]
-                if type(it) == "table" and it.id == "sleepscreen_widgets_fallback" then
+                if type(it) == "table" and it.id == "sleepscreenwidgets_fallback" then
                     table.remove(tab, ii)
                 end
             end
@@ -121,8 +115,8 @@ end
 local function inject_fallback_combined(menu_items, tab_item_table)
     local MenuSleep = require("menu.menu_sleep")
     local entry = MenuSleep.buildFallbackCombinedEntry(plugin_inst)
-    entry.id = "sleepscreen_widgets_fallback"
-    menu_items.sleepscreen_widgets_fallback = entry
+    entry.id = "sleepscreenwidgets_fallback"
+    menu_items.sleepscreenwidgets_fallback = entry
     if not tab_item_table then return end
     for ti = 1, #tab_item_table do
         local tab = tab_item_table[ti]
@@ -143,7 +137,7 @@ local function inject_fallback_combined(menu_items, tab_item_table)
 end
 
 local function patch_menu_class(MenuClass)
-    if MenuClass._sleepscreen_widgets_menu_patched then return end
+    if MenuClass._sleepscreenwidgets_menu_patched then return end
     local orig = MenuClass.setUpdateItemTable
     MenuClass.setUpdateItemTable = function(self, ...)
         orig(self, ...)
@@ -153,7 +147,7 @@ local function patch_menu_class(MenuClass)
             inject_fallback_combined(self.menu_items, self.tab_item_table)
         end
     end
-    MenuClass._sleepscreen_widgets_menu_patched = true
+    MenuClass._sleepscreenwidgets_menu_patched = true
 end
 
 local M = {}
