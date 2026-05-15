@@ -118,7 +118,7 @@ function GridComposer.compose(placements, ctx)
             ctx.cell_max_w = math.max(LAYOUT.cell_content_min_px, content_w)
             ctx.cell_max_h = math.max(LAYOUT.cell_content_min_px, content_h)
             ctx.zone_index = zone_tag
-            local card_palette = block.type == "calendar_tile"
+            local card_palette = (block.type == "calendar_tile" or block.type == "clock_analog")
                 and FrameStyle.card_colors_dark_tile()
                 or FrameStyle.card_colors_light()
             ctx.card_palette = card_palette

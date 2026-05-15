@@ -23,8 +23,12 @@ A [KOReader](https://github.com/koreader/koreader) plugin that replaces the defa
 
 If any of this is missing, KOReader will show the normal sleep message instead of the grid.
 
+## Configuring plugin
+
+After the plugin is enabled in **Plugin management** you can find all settings for plugin in **Screen → Screensaver → Sleepscreen widgets**. You can rearrange the widgets in the grid, adjust the spacing between them and set the widgets refresh rate (default 10 minutes).
+
 ## Installation
 
 1. Copy the plugin folder into KOReader’s `plugins` directory, for example:  
-   `koreader/plugins/sleepscreen-widgets.koplugin/`
+   `koreader/plugins/sleepscreenwidgets.koplugin/`
 2. Restart KOReader and enable the plugin in the menu.

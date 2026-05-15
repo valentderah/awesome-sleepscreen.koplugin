@@ -20,6 +20,7 @@ function M.card_colors_light()
         text_secondary = Blitbuffer.COLOR_GRAY_3, -- tune on e-ink toward #666
         progress_track = Blitbuffer.COLOR_GRAY_9, -- tune toward #E0E0E0
         progress_fill = Blitbuffer.COLOR_BLACK,
+        calendar_dots = Blitbuffer.COLOR_BLACK,
     }
 end
 
@@ -32,6 +33,7 @@ function M.card_colors_dark_tile()
         text_secondary = Blitbuffer.COLOR_GRAY_9,
         progress_track = light.progress_track,
         progress_fill = light.progress_fill,
+        calendar_dots = Blitbuffer.COLOR_WHITE,
     }
 end
 

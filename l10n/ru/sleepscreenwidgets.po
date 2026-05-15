@@ -1,0 +1,225 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "%T %c …"
+msgstr "%T %c …"
+
+msgid "1 column"
+msgstr "1 колонка"
+
+msgid "2 columns"
+msgstr "2 колонки"
+
+msgid "3 columns"
+msgstr "3 колонки"
+
+msgid "6×3 sleep banner grid with Frame-style widget cards (1–3 column wide widgets): clocks, templates, highlights, date/battery/book/calendar, and reading time."
+msgstr "Сетка баннера сна 6×3 с карточками виджетов в стиле Frame (ширина 1–3 колонки): часы, шаблоны, подсветки, дата/батарея/книга/календарь и время чтения."
+
+msgid "Analog clock"
+msgstr "Аналоговые часы"
+
+msgid "Analog dial diameter % (50–100)…"
+msgstr "Диаметр аналогового циферблата, % (50–100)…"
+
+msgid "Banner refresh interval (seconds)"
+msgstr "Интервал обновления баннера (сек)"
+
+msgid "Battery status"
+msgstr "Батарея"
+
+msgid "Calendar tile"
+msgstr "Календарь"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Clock"
+msgstr "Часы"
+
+msgid "Current book"
+msgstr "Текущая книга"
+
+msgid "Daily goal (minutes, 0 = no ring cap)"
+msgstr "Дневная цель (минуты, 0 = без верхнего предела кольца)"
+
+msgid "Daily goal (statistics minutes)…"
+msgstr "Дневная цель (минуты из статистики)…"
+
+msgid "Date & time header"
+msgstr "Дата и время"
+
+msgid "Default gap"
+msgstr "Общий зазор"
+
+msgid "Default grid / widget gap (px)"
+msgstr "Общий зазор сетки и виджетов (px)"
+
+msgid "Dial diameter"
+msgstr "Диаметр циферблата (%)"
+
+msgid "Edit template pattern…"
+msgstr "Изменить шаблон текста…"
+
+msgid "Edit time format…"
+msgstr "Изменить формат времени…"
+
+msgid "Edit…"
+msgstr "Изменить…"
+
+msgid "Footer template uses % codes from placeholder reference."
+msgstr "В подписи к цитате используйте коды с % — см. справку «Коды шаблона виджета»."
+
+msgid "Grid column gap (px, 0 = default gap)"
+msgstr "Зазор между столбцами сетки (px, 0 = общий зазор)"
+
+msgid "Grid horizontal inset (px)"
+msgstr "Горизонтальный отступ сетки (px)"
+
+msgid "Grid horizontal inset from screen (px)"
+msgstr "Горизонтальный отступ сетки от краёв экрана (px)"
+
+msgid "Grid row gap (px, 0 = default gap)"
+msgstr "Зазор между строками сетки (px, 0 = общий зазор)"
+
+msgid "Grid vertical inset (px)"
+msgstr "Вертикальный отступ сетки (px)"
+
+msgid "Grid vertical inset from screen (px)"
+msgstr "Вертикальный отступ сетки от краёв экрана (px)"
+
+msgid "Highlight uses document annotations (see KOReader docs)."
+msgstr "Подсветка берётся из заметок в документе (см. документацию KOReader)."
+
+msgid "Left/right margin between the screen border and the 6×3 grid; scaled for DPI. When unset, the combined \"legacy\" inset value is used for this axis."
+msgstr "Поля слева и справа между краем экрана и сеткой 6×3; масштабируется под DPI. Если не задано отдельно, для этой оси используется общее (устаревшее) значение отступа."
+
+msgid "MIN"
+msgstr "МИН"
+
+msgid "No book open"
+msgstr "Нет открытой книги"
+
+msgid "No book selected"
+msgstr "Книга не выбрана"
+
+msgid "No quotes of the selected highlight types"
+msgstr "Нет цитат выбранных типов подсветки"
+
+msgid "No quotes saved for this book yet"
+msgstr "Для этой книги ещё нет сохранённых цитат"
+
+msgid "Not enough space for this widget here."
+msgstr "Недостаточно места для этого виджета."
+
+msgid "Random highlight"
+msgstr "Случайная подсветка"
+
+msgid "READING · TODAY"
+msgstr "ЧТЕНИЕ · СЕГОДНЯ"
+
+msgid "Reading time today"
+msgstr "Чтение сегодня"
+
+msgid "Remove widget"
+msgstr "Удалить виджет"
+
+msgid "Row %d (%s)"
+msgstr "Строка %d (%s)"
+
+msgid "Row %d, column %d — (wider widget @ %d,%d)"
+msgstr "Строка %d, столбец %d — (широкий виджет в %d,%d)"
+
+msgid "Row %d, column %d — %s"
+msgstr "Строка %d, столбец %d — %s"
+
+msgid "Row %d, column %d — %s (%d cols)"
+msgstr "Строка %d, столбец %d — %s (%d кол.)"
+
+msgid "Row %d, column %d — empty"
+msgstr "Строка %d, столбец %d — пусто"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Sleep banner refresh interval (seconds, 0 = off)"
+msgstr "Интервал обновления баннера сна (сек, 0 = выкл.)"
+
+msgid "Sleepscreen widgets"
+msgstr "Sleepscreen widgets"
+
+msgid "strftime format"
+msgstr "Формат strftime"
+
+msgid "Template"
+msgstr "Шаблон"
+
+msgid "Template widget codes"
+msgstr "Коды шаблона виджета"
+
+msgid "Text template"
+msgstr "Текст по шаблону"
+
+msgid "That width does not fit here."
+msgstr "Такая ширина здесь не помещается."
+
+msgid "This cell is part of a widget anchored at row %d, column %d."
+msgstr "Эта ячейка — часть виджета с якорем в строке %d, столбце %d."
+
+msgid "Title & stats lines use the same codes as the KOReader sleep screen message editor:\n\n"
+msgstr "Строки заголовка и прогресса используют те же коды, что редактор сообщения экрана сна в KOReader:\n\n"
+
+msgid "Top/bottom margin between the screen border and the 6×3 grid; scaled for DPI. When unset, the combined \"legacy\" inset value is used for this axis."
+msgstr "Поля сверху и снизу между краем экрана и сеткой 6×3; масштабируется под DPI. Если не задано отдельно, для этой оси используется общее (устаревшее) значение отступа."
+
+msgid "Untitled"
+msgstr "Без названия"
+
+msgid "Default after plugin update is 10 minutes (600 s). Use 0 to turn auto-refresh off. When greater than zero, dynamic widgets (clock, date, battery, calendar, analog clock) refresh periodically. Values below 60 seconds (1 minute) are clamped to 60 seconds. Large intervals save battery."
+msgstr "По умолчанию после обновления плагина — 10 минут (600 с). Значение 0 отключает автообновление. При значении больше нуля динамические виджеты (часы, дата, батарея, календарь, аналоговые часы) периодически обновляются. Значения ниже 60 секунд (1 минуты) ограничиваются до 60 секунд. Большие интервалы экономят заряд."
+
+msgid "When ON, replaces the sleep-screen banner with the 6×3 grid layout when KOReader uses Banner message mode."
+msgstr "Если включено, баннер экрана сна заменяется сеткой 6×3 при режиме сообщения «Banner» в KOReader."
+
+msgid "Widget corner radius"
+msgstr "Скругление углов виджета"
+
+msgid "Widget corner radius (px)"
+msgstr "Скругление углов виджета (px)"
+
+msgid "Widget padding"
+msgstr "Внутренний отступ виджета"
+
+msgid "Widget padding (px)"
+msgstr "Внутренний отступ виджета (px)"
+
+msgid "Widget width: 1 column"
+msgstr "Ширина виджета: 1 колонка"
+
+msgid "Widget width: 2 columns"
+msgstr "Ширина виджета: 2 колонки"
+
+msgid "Widget width: 3 columns"
+msgstr "Ширина виджета: 3 колонки"
+
+msgid "Widgets grid (6×3)"
+msgstr "Сетка виджетов (6×3)"
+
+msgid "Column gap"
+msgstr "Зазор столбцов"
+
+msgid "Row gap"
+msgstr "Зазор строк"
+
+msgid "\n\n\nQuote footer (under the highlight) uses doubled percents so it does not clash with KOReader codes:\n\n"
+msgstr "\n\n\nПодпись под цитатой использует двойной символ процента, чтобы не пересекаться с кодами KOReader:\n\n"
+
+msgid "%T title\n%A author\n%S series\n%t total pages\n%c current page\n%l pages left in chapter\n%p book percentage read\n%H time left in book\n%C chapter title\n%P chapter percentage read\n%h time left in chapter\n%F file path\n%f file name\n%b battery level\n%B battery symbol\n%r separator (reader footer separator)\n%D current date (yyyy-mm-dd)\n%d current date (mm-dd)\n%m current time (hh:mm)\n%M current time (hh:mm:ss)\n"
+msgstr "%T title\n%A author\n%S series\n%t total pages\n%c current page\n%l pages left in chapter\n%p book percentage read\n%H time left in book\n%C chapter title\n%P chapter percentage read\n%h time left in chapter\n%F file path\n%f file name\n%b battery level\n%B battery symbol\n%r separator (reader footer separator)\n%D current date (yyyy-mm-dd)\n%d current date (mm-dd)\n%m current time (hh:mm)\n%M current time (hh:mm:ss)\n"
+
+msgid "%%DT date of highlight (short)\n%%HM time of highlight (hh:mm)\n%%PG page / page label of highlight\n%%C chapter of highlight\n%%A author (document metadata)\n%%T title (document metadata)\n\nUse \\n in templates for a line break.\n"
+msgstr "%%DT date of highlight (short)\n%%HM time of highlight (hh:mm)\n%%PG page / page label of highlight\n%%C chapter of highlight\n%%A author (document metadata)\n%%T title (document metadata)\n\nUse \\n in templates for a line break.\n"

@@ -1,4 +1,4 @@
---[[ Persistence for grid banner + banner chrome. ]]
+--[[ Grid layout + banner appearance + plugin flags in LuaSettings (sleepscreenwidgets.lua). ]]
 local DataStorage = require("datastorage")
 local LuaSettings = require("luasettings")
 local util = require("util")
@@ -7,76 +7,82 @@ local Config = require("config")
 local GridModel = require("grid.grid_model")
 local Registry = require("banner.widgets.registry")
 
-local SETTINGS_BASENAME = "sleepscreen_widgets.lua"
+local SETTINGS_FILE = "sleepscreenwidgets.lua"
 
---- Dropped widget types: removed from grid on load/save (no migration to another type).
-local REMOVED_WIDGET_TYPES = { sleep_stats = true }
+--- Types no longer supported (e.g. removed widgets); stripped whenever grid is read or saved.
+local STALE_WIDGET_TYPES = { sleep_stats = true }
 
 local Settings = {}
 Settings._lua = nil
 
-local function strip_removed_widget_placements(list)
-    if type(list) ~= "table" then
+local function strip_stale_widgets(placements)
+    if type(placements) ~= "table" then
         return {}
     end
     local out = {}
-    for _, p in ipairs(list) do
-        if type(p) == "table" and type(p.type) == "string" and not REMOVED_WIDGET_TYPES[p.type] then
+    for _, p in ipairs(placements) do
+        if type(p) == "table" and type(p.type) == "string" and not STALE_WIDGET_TYPES[p.type] then
             table.insert(out, p)
         end
     end
     return out
 end
 
-local function settings_path(dir)
-    return dir .. "/" .. SETTINGS_BASENAME
+local function sleep_refresh_default_if_missing(lua)
+    if lua:readSetting("sleep_refresh_interval_sec") == nil then
+        lua:saveSetting("sleep_refresh_interval_sec", Config.SLEEP_REFRESH_INTERVAL.default_sec)
+    end
 end
 
-function Settings:getSettingsDir()
-    return DataStorage:getSettingsDir()
+--- Span for GridModel; ensures widget types are registered first.
+local function grid_span(type_id)
+    Registry.ensure_registered()
+    return Registry.default_col_span(type_id)
+end
+
+local function migrate_stored_settings(lua)
+    local stored_version = lua:readSetting("schema_version") or 0
+    if stored_version >= Config.SCHEMA_VERSION then
+        return
+    end
+    Registry.ensure_registered()
+    local raw = lua:readSetting("grid")
+    local placements
+    if raw == nil then
+        placements = GridModel.normalizePlacements(Config.DEFAULT_GRID_PLACEMENTS, grid_span)
+    else
+        placements = strip_stale_widgets(GridModel.parseSaved(raw, grid_span))
+    end
+    lua:saveSetting("grid", GridModel.wrapSaved(placements))
+    lua:saveSetting("schema_version", Config.SCHEMA_VERSION)
+    sleep_refresh_default_if_missing(lua)
+    lua:flush()
+end
+
+local function ensure_default_grid(lua)
+    if lua:readSetting("grid") ~= nil then
+        return
+    end
+    local placements = GridModel.normalizePlacements(Config.DEFAULT_GRID_PLACEMENTS, grid_span)
+    lua:saveSetting("grid", GridModel.wrapSaved(placements))
+    lua:flush()
 end
 
 function Settings:open()
-    if self._lua then return self._lua end
-    local path = settings_path(self:getSettingsDir())
-    self._lua = LuaSettings:open(path)
-
-    local function span_fn(t)
-        return Registry.default_col_span(t)
+    if self._lua then
+        return self._lua
     end
-
-    local function seed_default_grid_if_absent(lua)
-        if lua:readSetting("grid") ~= nil then
-            return
-        end
-        Registry.ensure_registered()
-        local placements = GridModel.normalizePlacements(Config.DEFAULT_GRID_PLACEMENTS, span_fn)
-        lua:saveSetting("grid", GridModel.wrapSaved(placements))
-        lua:flush()
-    end
-
-    local sv = self._lua:readSetting("schema_version") or 0
-    if sv < Config.SCHEMA_VERSION then
-        Registry.ensure_registered()
-        local raw = self._lua:readSetting("grid")
-        local placements
-        if raw == nil then
-            placements = GridModel.normalizePlacements(Config.DEFAULT_GRID_PLACEMENTS, span_fn)
-        else
-            placements = strip_removed_widget_placements(GridModel.parseSaved(raw, span_fn))
-        end
-        self._lua:saveSetting("grid", GridModel.wrapSaved(placements))
-        self._lua:saveSetting("schema_version", Config.SCHEMA_VERSION)
-        self._lua:flush()
-    end
-
-    seed_default_grid_if_absent(self._lua)
-
+    local dir = DataStorage:getSettingsDir()
+    self._lua = LuaSettings:open(dir .. "/" .. SETTINGS_FILE)
+    migrate_stored_settings(self._lua)
+    ensure_default_grid(self._lua)
     return self._lua
 end
 
 function Settings:flush()
-    if self._lua then self._lua:flush() end
+    if self._lua then
+        self._lua:flush()
+    end
 end
 
 function Settings:isPluginEnabled()
@@ -91,26 +97,49 @@ end
 function Settings:effectiveBanner()
     local b = {}
     util.tableMerge(b, Config.DEFAULT_BANNER)
-    local saved = self:open():readSetting("banner") or {}
-    util.tableMerge(b, saved)
+    util.tableMerge(b, self:open():readSetting("banner") or {})
     return b
-end
-
-local function grid_default_span(type_id)
-    Registry.ensure_registered()
-    return Registry.default_col_span(type_id)
 end
 
 function Settings:getGridPlacements()
     local raw = self:open():readSetting("grid")
-    return strip_removed_widget_placements(GridModel.parseSaved(raw, grid_default_span))
+    return strip_stale_widgets(GridModel.parseSaved(raw, grid_span))
 end
 
 function Settings:saveGridPlacements(placements)
-    Registry.ensure_registered()
-    placements = strip_removed_widget_placements(placements)
-    local norm = GridModel.normalizePlacements(placements, grid_default_span)
+    placements = strip_stale_widgets(placements)
+    local norm = GridModel.normalizePlacements(placements, grid_span)
     self:open():saveSetting("grid", GridModel.wrapSaved(norm))
+    self:flush()
+end
+
+function Settings:rawSleepRefreshIntervalSec()
+    local v = self:open():readSetting("sleep_refresh_interval_sec")
+    if v == nil then
+        return 0
+    end
+    return math.floor(tonumber(v) or 0)
+end
+
+function Settings:effectiveSleepRefreshIntervalSec()
+    local n = self:rawSleepRefreshIntervalSec()
+    if n <= 0 then
+        return 0
+    end
+    local L = Config.SLEEP_REFRESH_INTERVAL
+    return math.max(L.min_sec, math.min(L.max_sec, n))
+end
+
+function Settings:setSleepRefreshIntervalSec(n)
+    n = math.floor(tonumber(n) or 0)
+    if n < 0 then
+        n = 0
+    end
+    local L = Config.SLEEP_REFRESH_INTERVAL
+    if n > 0 then
+        n = math.min(L.max_sec, n)
+    end
+    self:open():saveSetting("sleep_refresh_interval_sec", n)
     self:flush()
 end
 

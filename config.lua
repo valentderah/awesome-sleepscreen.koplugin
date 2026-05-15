@@ -1,8 +1,8 @@
---[[ Defaults for sleepscreen_widgets plugin. ]]
+--[[ Defaults for sleepscreenwidgets plugin. ]]
 local Config = {}
 
 --- Bump when persisted settings shape changes; `Settings:open` re-writes `grid` from v2 or clears to empty.
-Config.SCHEMA_VERSION = 8
+Config.SCHEMA_VERSION = 9
 
 Config.GRID_EDGE_INSET_MAX = 512
 
@@ -21,6 +21,13 @@ Config.UI_LIMITS = {
     widget_radius_px = { max = 48 },
     widget_padding_px = { max = 32 },
     widget_gap_px = { max = 24 },
+}
+
+--- Sleep banner auto-refresh (seconds). 0 = off. When > 0, effective interval is clamped.
+Config.SLEEP_REFRESH_INTERVAL = {
+    min_sec = 60,
+    max_sec = 86400,
+    default_sec = 600,
 }
 
 --- Initial grid when `grid` is absent from settings (first open). Grid is 3 cols × 6 rows (see GridModel).

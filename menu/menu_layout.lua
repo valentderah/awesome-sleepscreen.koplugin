@@ -51,6 +51,18 @@ function MenuLayout.buildAppearanceSubmenu()
     local items = {}
 
     table.insert(items, {
+        text = _("Sleep banner refresh interval (seconds, 0 = off)"),
+        help_text = _([[Default after plugin update is 10 minutes (600 s). Use 0 to turn auto-refresh off. When greater than zero, dynamic widgets (clock, date, battery, calendar, analog clock) refresh periodically. Values below 60 seconds (1 minute) are clamped to 60 seconds. Large intervals save battery.]]),
+        callback = function()
+            edit_banner_number(_("Banner refresh interval (seconds)"), function()
+                return Settings:rawSleepRefreshIntervalSec()
+            end, function(n)
+                Settings:setSleepRefreshIntervalSec(n)
+            end)
+        end,
+    })
+
+    table.insert(items, {
         text = _("Widget corner radius (px)"),
         callback = function()
             edit_banner_number(_("Widget corner radius"), function()
@@ -189,17 +201,18 @@ function MenuLayout.buildAppearanceSubmenu()
     return items
 end
 
-function MenuLayout.buildLayoutRootSubmenu(_plugin_inst)
+--- Grid editor + appearance/settings submenu entries (middle of Sleepscreen widgets menu).
+function MenuLayout.buildGridAndSettingsEntries()
     require("l10n").load()
     return {
         {
-            text = _("Sleep banner grid (6×3)"),
+            text = _("Widgets grid (6×3)"),
             sub_item_table_func = function()
                 return GridEditor.gridZonesMenu()
             end,
         },
         {
-            text = _("Banner appearance"),
+            text = _("Settings"),
             sub_item_table_func = function()
                 return MenuLayout.buildAppearanceSubmenu()
             end,
