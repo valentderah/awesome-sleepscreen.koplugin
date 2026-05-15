@@ -10,9 +10,12 @@ ZIP := $(DISTDIR)/$(PLUGIN_SLUG)-$(VERSION).zip
 ARCHIVE_EXCLUDES := \
 	":(exclude)tests" \
 	":(exclude)assets" \
+	":(exclude)docs" \
 	":(exclude)Makefile" \
 	":(exclude)tools" \
-	":(exclude).gitignore"
+	":(exclude).gitignore" \
+	":(exclude)README.ru.md" \
+	":(exclude)CLI.md"
 
 .PHONY: prod pack clean
 
